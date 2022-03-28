@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6A95DFFF-4C18-424C-B1C2-9906014ECC05}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>MonitorTools</RootNamespace>
+    <AssemblyName>MonitorTools</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DigitalPlatform.SIP\BaseMessage.cs" />
+    <Compile Include="DigitalPlatform.SIP\FixedLengthField.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\BlockPatron_01.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\Checkin_09.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\Checkout_11.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\EndPatronSession_35.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\FeePaid_37.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\Hold_15.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\ItemInformation_17.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\ItemStatusUpdate_19.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\Login_93.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\PatronEnable_25.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\PatronInformation_63.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\PatronStatusRequest_23.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\RenewAll_65.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\Renew_29.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\RequestACSResend_97.cs" />
+    <Compile Include="DigitalPlatform.SIP\Request\SCStatus_99.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\ACSStatus_98.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\CheckinResponse_10.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\CheckoutResponse_12.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\EndSessionResponse_36.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\FeePaidResponse_38.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\HoldResponse_16.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\ItemInformationResponse_18.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\ItemStatusUpdateResponse_20.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\LoginResponse_94.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\PatronEnableResponse_26.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\PatronInformationResponse_64.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\PatronStatusResponse_24.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\RenewAllResponse_66.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\RenewResponse_30.cs" />
+    <Compile Include="DigitalPlatform.SIP\Response\RequestSCResend_96.cs" />
+    <Compile Include="DigitalPlatform.SIP\SCHelper.cs" />
+    <Compile Include="DigitalPlatform.SIP\SIPConst.cs" />
+    <Compile Include="DigitalPlatform.SIP\SIPUtility.cs" />
+    <Compile Include="DigitalPlatform.SIP\TcpClientWrapper.cs" />
+    <Compile Include="DigitalPlatform.SIP\VariableLengthField .cs" />
+    <Compile Include="DigitalPlatform.Xml\DigitalPlatform.Xml.cs" />
+    <Compile Include="DigitalPlatform.Xml\DomUtil.cs" />
+    <Compile Include="DongshifangMessageInterface\DongshifangMessageHost.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DigitalPlatform.SIP\SIP2Entity\Response\BaseResponse1.txt" />
+    <Content Include="DigitalPlatform.SIP\SIP2Entity\Response\CheckInResponse.txt" />
+    <Content Include="DigitalPlatform.SIP\SIP2Entity\SIP2Message.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
