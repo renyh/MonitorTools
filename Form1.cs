@@ -131,11 +131,18 @@ namespace MonitorTools
         {
             get
             {
-                string strEncoding = this.comboBox_encoding.Text.Trim();
-                if (string.IsNullOrEmpty(strEncoding))
-                    return Encoding.UTF8;
-                else
-                    return Encoding.GetEncoding(strEncoding);
+                Encoding encoding = Encoding.UTF8;
+                this.Invoke(new Action(() =>
+                {
+
+                    string strEncoding = this.comboBox_encoding.Text.Trim();
+                    if (string.IsNullOrEmpty(strEncoding))
+                        encoding= Encoding.UTF8;
+                    else
+                        encoding= Encoding.GetEncoding(strEncoding);
+                }));
+
+                return encoding;
             }
         }
 
@@ -282,16 +289,13 @@ namespace MonitorTools
             string responseText = "";
              error = "";
 
-            string password = this.textBox_password.Text.Trim();
-
-
             Login_93 request = new Login_93()
             {
                 UIDAlgorithm_1 = " ",
                 PWDAlgorithm_1 = " ",
 
                 CN_LoginUserId_r = SipAccount,
-                CO_LoginPassword_r = password,
+                CO_LoginPassword_r = Password,
                 CP_LocationCode_o = SipCP
             };
             string cmdText = request.ToText();
@@ -311,6 +315,60 @@ namespace MonitorTools
 
             this.Print("recv:" + responseText);
             return nRet;
+        }
+
+        // 发送消息，接收消息
+        public int SendAndRecvMessage(TcpClientWrapper clientWrapper,
+            string requestText,
+            out BaseMessage response,
+            out string responseText,
+            out string error)
+        {
+            error = "";
+            response = null;
+            responseText = "";
+            int nRet = 0;
+
+            if (clientWrapper == null)
+            {
+                error = "尚未创建TcpClient对象";
+                return -1;
+            }
+
+            // 校验消息
+            BaseMessage request = null;
+            nRet = SIPUtility.ParseMessage(requestText, out request, out error);
+            if (nRet == -1)
+            {
+                error = "校验发送消息异常:" + error;
+                return -1;
+            }
+
+            // 发送消息
+            nRet = clientWrapper.SendMessage(requestText, out error);
+            if (nRet == -1)
+            {
+                error = "发送消息出错:" + error;
+                return -1;
+            }
+
+            // 接收消息
+            nRet = clientWrapper.RecvMessage(out responseText, out error);
+            if (nRet == -1)
+            {
+                error = "接收消息出错:" + error;
+                return -1;
+            }
+
+            //解析返回的消息
+            nRet = SIPUtility.ParseMessage(responseText, out response, out error);
+            if (nRet == -1)
+            {
+                error = "解析返回的消息异常:" + error + "\r\n" + responseText;
+                return -1;
+            }
+
+            return 0;
         }
 
         #endregion
@@ -337,37 +395,17 @@ namespace MonitorTools
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "秒数[" + SipPort + "]不合法，必须是数字。");
+                MessageBox.Show(this, "秒数[" + Second + "]不合法，必须是数字。");
                 return;
             }
-
-            string error = "";
-
-            // 连接
-            int nRet = this.Connection(out error);
-            if (nRet == -1)
-            {
-                MessageBox.Show(this, "连接出错："+error);
-                return;
-            }
-
-            // 登录
-             nRet = this.login(out error);
-            if (nRet == -1)
-            {
-                MessageBox.Show(this,"登录出错"+ error);
-                return;
-            }
-
-
-
+           
             // 每次开头都重新 new 一个。这样避免受到上次遗留的 _cancel 对象的状态影响
             this._cancel.Dispose();
             this._cancel = new CancellationTokenSource();
             // 启动一个线程
             Task.Run(() =>
             {
-                doSomething(this._cancel.Token,nSecond,Photo);
+                Monitor(this._cancel.Token,nSecond,Photo);
             });
         }
 
@@ -378,8 +416,10 @@ namespace MonitorTools
             this._cancel.Cancel();
         }
 
+        int _seed = 0;
+
         // 干活
-        void doSomething(CancellationToken token,int second,string photo)
+        void Monitor(CancellationToken token,int second,string photo)
         {
             // 设置按钮状态
             this.Invoke((Action)(() =>
@@ -390,55 +430,43 @@ namespace MonitorTools
                 int i = 0;
                 while (token.IsCancellationRequested == false)
                 {
-                    /*
                     // 中断也可以用
-                    token.ThrowIfCancellationRequested();
-                    */
+                    //token.ThrowIfCancellationRequested();
 
-                    // 打印一个序号
-                    i++;
-                    this.PrintSafe(i.ToString());
+                    string error = "";
 
-
-                    string message = "9900302.00";
-                    string cmdText = message;
-                    this.PrintSafe("send:" + cmdText);
-                    BaseMessage response = null;
-                    int nRet = SCHelper.Instance.SendAndRecvMessage(cmdText,
-                        out response,
-                        out string responseText,
-                        out string error);
+                    string requestText = "";
+                    string responseText = "";
+                    int nRet = this.doOnething(out requestText,
+                        out responseText,
+                        out error);
                     if (nRet == -1)
                     {
-                        this.PrintSafe("error:" + error);
+                        string sms = GetServerInfo() + error + "--" + responseText ;
+                        this.PrintSafe(sms);  // 把出错信息打印在屏幕上
 
-                        // 发送短信
-                        string sms = "服务器["+GetServerInfo()+"]访问不通，请及时处理！";
-                        this.PrintSafe("手机号["+photo+"]，短信内容:" + sms);
-                        nRet = DongshifangMessageHost.SendMessage(photo,
-                            sms,
-                            "",
-                            out error);
-                        if (nRet <= 0)
+                        // 因为发短信要收钱，所以加了一个开关，测试的时候，可以关闭短信
+                        if (IsSendSMS == true)
                         {
-                           this.PrintSafe("发送短信失败:" + error);
-                        }
-                        else
-                        {
-                            this.PrintSafe("发送短信成功。");
-                            return;
-                        }
+                            // 发送短信
 
-                        // 退出循环
-                        break;
+                            if (sms.Length > 60)
+                            {
+                                sms = sms.Substring(0, 60);  // 1条短信最多70字符
+                            }
+                            this.PrintSafe("手机号[" + photo + "]，短信内容:" + sms);
+                            nRet = DongshifangMessageHost.SendMessage(photo,
+                                sms,
+                                "",
+                                out error);
+                            if (nRet <= 0)
+                                this.PrintSafe("发送短信失败:" + error);
+                            else
+                                this.PrintSafe("发送短信成功。");
+                        }
                     }
 
-                    this.PrintSafe("recv:" + responseText);
-
-
-
-
-                    Thread.Sleep(1000 * second);//间隔5秒
+                    Thread.Sleep(1000 * second);//间隔秒数
                 }
             }
             finally
@@ -447,6 +475,109 @@ namespace MonitorTools
                 this.Invoke((Action)(() =>
                     EnableControls(true)
                     ));
+            }
+        }
+
+        public int doOnething(out string requestText,
+            out string responseText,
+            out string error)
+        {
+            error = "";
+            requestText = "";
+            responseText = "";
+
+
+            // 端口
+            int nPort = 0;
+            try
+            {
+                nPort = int.Parse(SipPort);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("端口[" + SipPort + "]不合法，必须是数字。");
+            }
+
+            _seed++;
+            this.PrintSafe(_seed.ToString()); // 打印一个序号
+
+            TcpClientWrapper clientWrapper = new TcpClientWrapper(this._encoding);
+            try
+            {
+
+                // 连接
+                string server = this.SipIP + ":" + this.SipPort;
+                bool bRet = clientWrapper.Connection(this.SipIP, nPort, out error);
+                if (bRet == false) // 出错
+                {
+                    error = "连接出错：" + error;
+                    this.Print(error);
+                    return -1;
+                }
+
+                string info = "连接服务器[" + server + "]成功";
+                this.Print(info);
+
+
+                // 登录
+                Login_93 request = new Login_93()
+                {
+                    UIDAlgorithm_1 = " ",
+                    PWDAlgorithm_1 = " ",
+
+                    CN_LoginUserId_r = SipAccount,
+                    CO_LoginPassword_r = Password,
+                    CP_LocationCode_o = SipCP
+                };
+                requestText = request.ToText();
+
+                this.Print("send:" + requestText);
+                BaseMessage response = null;
+                int nRet = this.SendAndRecvMessage(clientWrapper,
+                    requestText,
+                    out response,
+                    out responseText,
+                    out error);
+                this.Print("recv:" + responseText);
+                if (nRet == -1)
+                {
+                    this.Print("error:" + error);
+                    return -1;
+                }
+                // 检查登录是否出错
+                if (responseText.Length > 3 && responseText.Substring(2, 1) == "0")
+                {
+                    error = "登录异常";
+                    return -1;
+                }    
+
+
+                // 发送99
+                requestText = "9900302.00";
+                this.PrintSafe("send:" + requestText);
+                nRet = this.SendAndRecvMessage(clientWrapper,
+                    requestText,
+                    out response,
+                    out responseText,
+                    out error);
+                this.Print("recv:" + responseText);
+                if (nRet == -1)
+                {
+                    this.PrintSafe("error:" + error);
+                    return -1;
+                }
+                // 检查98是否出错
+                if (responseText.Length > 3 && responseText.Substring(2, 1) == "N")
+                {
+                    error = "98异常";
+                    return -1;
+                }
+
+                return 0;
+            }
+            finally
+            {
+                clientWrapper.Close();
             }
         }
 
@@ -467,11 +598,27 @@ namespace MonitorTools
             this.Invoke((Action)(() =>
             {
                 info= this.SipIP + ":" + this.SipPort;
-
             }
             ));
 
             return info;
+        }
+
+
+        public bool IsSendSMS
+        {
+            get
+            {
+                bool bRet = false;
+                // 界面显示信息
+                this.Invoke((Action)(() =>
+                {
+                    bRet = this.checkBox1.Checked;
+                }
+                ));
+
+                return bRet;
+            }
         }
 
         // 设置控件是否可用
@@ -480,9 +627,9 @@ namespace MonitorTools
             this.button_start.Enabled = bEnable;
             this.button_stop.Enabled = !(bEnable);
 
-            this.button_connection.Enabled = bEnable;
-            this.button_login.Enabled = bEnable;
             this.button_send.Enabled = bEnable;
+
+            this.checkBox1.Enabled = bEnable;
         }
 
         #endregion
@@ -498,23 +645,25 @@ namespace MonitorTools
         }
 
         // 不支持异步调用
-        public static void WriteHtml(WebBrowser webBrowser,
+        public  void WriteHtml(WebBrowser webBrowser,
             string strHtml)
         {
-
-            HtmlDocument doc = webBrowser.Document;
-
-            if (doc == null)
+            this.Invoke(new Action(() =>
             {
-                webBrowser.Navigate("about:blank");
-                doc = webBrowser.Document;
-                doc.Write("<pre>");
-            }
+                HtmlDocument doc = webBrowser.Document;
 
-            doc.Write(strHtml);
+                if (doc == null)
+                {
+                    webBrowser.Navigate("about:blank");
+                    doc = webBrowser.Document;
+                    doc.Write("<pre>");
+                }
 
-            // 保持末行可见
-            ScrollToEnd(webBrowser);
+                doc.Write(strHtml);
+
+                // 保持末行可见
+                ScrollToEnd(webBrowser);
+            }));
         }
 
         public void ClearHtml()

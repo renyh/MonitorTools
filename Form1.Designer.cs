@@ -35,13 +35,11 @@
             this.button_send = new System.Windows.Forms.Button();
             this.comboBox_encoding = new System.Windows.Forms.ComboBox();
             this.label67 = new System.Windows.Forms.Label();
-            this.button_connection = new System.Windows.Forms.Button();
             this.textBox_port = new System.Windows.Forms.TextBox();
             this.label65 = new System.Windows.Forms.Label();
             this.textBox_addr = new System.Windows.Forms.TextBox();
             this.label64 = new System.Windows.Forms.Label();
             this.button_start = new System.Windows.Forms.Button();
-            this.button_login = new System.Windows.Forms.Button();
             this.textBox_username = new System.Windows.Forms.TextBox();
             this.textBox_password = new System.Windows.Forms.TextBox();
             this.label70 = new System.Windows.Forms.Label();
@@ -56,7 +54,7 @@
             this.textBox_second = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.button_clear = new System.Windows.Forms.Button();
-            this.button_send99 = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -127,17 +125,6 @@
             this.label67.TabIndex = 2;
             this.label67.Text = "编码方式:";
             // 
-            // button_connection
-            // 
-            this.button_connection.Location = new System.Drawing.Point(108, 127);
-            this.button_connection.Margin = new System.Windows.Forms.Padding(4);
-            this.button_connection.Name = "button_connection";
-            this.button_connection.Size = new System.Drawing.Size(112, 34);
-            this.button_connection.TabIndex = 2;
-            this.button_connection.Text = "测试连接";
-            this.button_connection.UseVisualStyleBackColor = true;
-            this.button_connection.Click += new System.EventHandler(this.button_connection_Click);
-            // 
             // textBox_port
             // 
             this.textBox_port.Location = new System.Drawing.Point(108, 57);
@@ -177,7 +164,7 @@
             // button_start
             // 
             this.button_start.Font = new System.Drawing.Font("宋体", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button_start.Location = new System.Drawing.Point(213, 176);
+            this.button_start.Location = new System.Drawing.Point(213, 138);
             this.button_start.Margin = new System.Windows.Forms.Padding(4);
             this.button_start.Name = "button_start";
             this.button_start.Size = new System.Drawing.Size(423, 50);
@@ -185,17 +172,6 @@
             this.button_start.Text = "启动监控服务器(发送99)";
             this.button_start.UseVisualStyleBackColor = true;
             this.button_start.Click += new System.EventHandler(this.button_start_Click);
-            // 
-            // button_login
-            // 
-            this.button_login.Location = new System.Drawing.Point(98, 126);
-            this.button_login.Margin = new System.Windows.Forms.Padding(4);
-            this.button_login.Name = "button_login";
-            this.button_login.Size = new System.Drawing.Size(112, 34);
-            this.button_login.TabIndex = 15;
-            this.button_login.Text = "测试登录";
-            this.button_login.UseVisualStyleBackColor = true;
-            this.button_login.Click += new System.EventHandler(this.button_login_Click);
             // 
             // textBox_username
             // 
@@ -256,10 +232,10 @@
             this.webBrowser1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.webBrowser1.Location = new System.Drawing.Point(12, 233);
+            this.webBrowser1.Location = new System.Drawing.Point(12, 195);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(949, 374);
+            this.webBrowser1.Size = new System.Drawing.Size(949, 412);
             this.webBrowser1.TabIndex = 18;
             // 
             // groupBox1
@@ -268,12 +244,11 @@
             this.groupBox1.Controls.Add(this.label65);
             this.groupBox1.Controls.Add(this.label67);
             this.groupBox1.Controls.Add(this.textBox_addr);
-            this.groupBox1.Controls.Add(this.button_connection);
             this.groupBox1.Controls.Add(this.textBox_port);
             this.groupBox1.Controls.Add(this.comboBox_encoding);
             this.groupBox1.Location = new System.Drawing.Point(12, -1);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(309, 168);
+            this.groupBox1.Size = new System.Drawing.Size(309, 132);
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             // 
@@ -285,10 +260,9 @@
             this.groupBox2.Controls.Add(this.label71);
             this.groupBox2.Controls.Add(this.textBox_locationCode);
             this.groupBox2.Controls.Add(this.textBox_username);
-            this.groupBox2.Controls.Add(this.button_login);
             this.groupBox2.Location = new System.Drawing.Point(327, 2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(309, 165);
+            this.groupBox2.Size = new System.Drawing.Size(309, 129);
             this.groupBox2.TabIndex = 21;
             this.groupBox2.TabStop = false;
             // 
@@ -308,7 +282,7 @@
             // button_stop
             // 
             this.button_stop.Font = new System.Drawing.Font("宋体", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button_stop.Location = new System.Drawing.Point(652, 176);
+            this.button_stop.Location = new System.Drawing.Point(652, 138);
             this.button_stop.Margin = new System.Windows.Forms.Padding(4);
             this.button_stop.Name = "button_stop";
             this.button_stop.Size = new System.Drawing.Size(160, 50);
@@ -319,16 +293,16 @@
             // 
             // textBox_second
             // 
-            this.textBox_second.Location = new System.Drawing.Point(111, 184);
+            this.textBox_second.Location = new System.Drawing.Point(124, 133);
             this.textBox_second.Name = "textBox_second";
-            this.textBox_second.Size = new System.Drawing.Size(95, 28);
+            this.textBox_second.Size = new System.Drawing.Size(74, 28);
             this.textBox_second.TabIndex = 24;
-            this.textBox_second.Text = "2";
+            this.textBox_second.Text = "60";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(16, 189);
+            this.label3.Location = new System.Drawing.Point(29, 138);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(89, 18);
             this.label3.TabIndex = 25;
@@ -336,7 +310,7 @@
             // 
             // button_clear
             // 
-            this.button_clear.Location = new System.Drawing.Point(834, 184);
+            this.button_clear.Location = new System.Drawing.Point(834, 146);
             this.button_clear.Name = "button_clear";
             this.button_clear.Size = new System.Drawing.Size(93, 31);
             this.button_clear.TabIndex = 26;
@@ -344,22 +318,22 @@
             this.button_clear.UseVisualStyleBackColor = true;
             this.button_clear.Click += new System.EventHandler(this.button_clear_Click);
             // 
-            // button_send99
+            // checkBox1
             // 
-            this.button_send99.Location = new System.Drawing.Point(652, 140);
-            this.button_send99.Name = "button_send99";
-            this.button_send99.Size = new System.Drawing.Size(133, 31);
-            this.button_send99.TabIndex = 27;
-            this.button_send99.Text = "测试发送99";
-            this.button_send99.UseVisualStyleBackColor = true;
-            this.button_send99.Click += new System.EventHandler(this.button_send99_Click);
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(32, 167);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(88, 22);
+            this.checkBox1.TabIndex = 27;
+            this.checkBox1.Text = "发短信";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(976, 630);
-            this.Controls.Add(this.button_send99);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button_clear);
             this.Controls.Add(this.textBox_second);
             this.Controls.Add(this.label3);
@@ -393,13 +367,11 @@
         private System.Windows.Forms.Button button_send;
         private System.Windows.Forms.ComboBox comboBox_encoding;
         private System.Windows.Forms.Label label67;
-        private System.Windows.Forms.Button button_connection;
         private System.Windows.Forms.TextBox textBox_port;
         private System.Windows.Forms.Label label65;
         private System.Windows.Forms.TextBox textBox_addr;
         private System.Windows.Forms.Label label64;
         private System.Windows.Forms.Button button_start;
-        private System.Windows.Forms.Button button_login;
         private System.Windows.Forms.TextBox textBox_username;
         private System.Windows.Forms.TextBox textBox_password;
         private System.Windows.Forms.Label label70;
@@ -414,7 +386,7 @@
         private System.Windows.Forms.TextBox textBox_second;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button_clear;
-        private System.Windows.Forms.Button button_send99;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 
