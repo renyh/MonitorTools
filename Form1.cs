@@ -580,6 +580,7 @@ namespace MonitorTools
             finally
             {
                 clientWrapper.Close();
+                clientWrapper = null;
             }
         }
 
