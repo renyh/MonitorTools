@@ -427,7 +427,9 @@ namespace MonitorTools
                 ));
             try
             {
-                int i = 0;
+                // 将跳转序号置为0
+                this._seed = 0;
+
                 while (token.IsCancellationRequested == false)
                 {
                     // 中断也可以用
